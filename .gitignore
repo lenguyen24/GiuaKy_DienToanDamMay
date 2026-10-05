@@ -9,6 +9,8 @@ node_modules/
 # De thi & Tai lieu ca nhan (Khong push len Git)
 DeKiemTraGiuaKi_DTDTM.pdf
 README.md
+*.docx
+generate_report.py
 
 # Logs & temp
 npm-debug.log*
