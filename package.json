@@ -1,0 +1,28 @@
+{
+  "name": "giuaky-dientoandammay",
+  "version": "1.0.0",
+  "description": "Ung dung Quan ly Sach tren Cloud - Kien truc Da ket noi va Stateless Session",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": [
+    "cloud-computing",
+    "mongodb-atlas",
+    "stateless-session",
+    "express",
+    "handlebars"
+  ],
+  "author": "Le Huu Nguyen - 23IT182",
+  "license": "ISC",
+  "dependencies": {
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^5.1.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.9.5"
+  }
+}
