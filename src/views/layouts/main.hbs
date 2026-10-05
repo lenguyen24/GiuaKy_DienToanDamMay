@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}} - 23IT182</title>
+  <!-- Google Fonts Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Header Navigation -->
+  <header class="navbar">
+    <div class="container nav-content">
+      <div class="brand">
+        <span class="logo-icon">📚</span>
+        <div class="brand-text">
+          <span class="brand-title">Cloud Book Manager</span>
+          <span class="brand-subtitle">Điện Toán Đám Mây - Giữa Kỳ</span>
+        </div>
+      </div>
+      <div class="nav-badges">
+        <span class="badge badge-cloud">☁️ MongoDB Atlas</span>
+        <span class="badge badge-stateless">⚡ Stateless Session</span>
+        <span class="badge badge-student">{{studentName}} ({{studentId}})</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Body Content -->
+  <main class="main-content">
+    <div class="container">
+      {{{body}}}
+    </div>
+  </main>
+
+  <!-- Required Footer -->
+  <footer class="app-footer">
+    <div class="container footer-content">
+      <div class="footer-info">
+        <p class="required-footer-text">
+          <strong>Họ và tên:</strong> {{studentName}} &nbsp;|&nbsp;
+          <strong>MSSV:</strong> {{studentId}} &nbsp;|&nbsp;
+          <strong>Mức VAT áp dụng:</strong> <span class="vat-tag">{{vatRate}}%</span>
+        </p>
+        <p class="footer-meta">
+          Hệ thống kiến trúc Đa kết nối Read/Write (Least Privilege) & Phiên làm việc phân tán trên Cloud
+        </p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
