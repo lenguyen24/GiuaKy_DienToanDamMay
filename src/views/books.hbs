@@ -1,0 +1,214 @@
+<!-- Dashboard Top Stats -->
+<section class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon">📖</div>
+    <div class="stat-details">
+      <span class="stat-label">Tổng số đầu sách</span>
+      <span class="stat-value">{{totalBooks}}</span>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">💰</div>
+    <div class="stat-details">
+      <span class="stat-label">Tổng giá trị (Đã gồm VAT {{vatRate}}%)</span>
+      <span class="stat-value">{{totalValue}} <small>VNĐ</small></span>
+    </div>
+  </div>
+
+  <div class="stat-card stat-card-highlight">
+    <div class="stat-icon">🌐</div>
+    <div class="stat-details">
+      <span class="stat-label">Stateless Session (MongoDB Atlas)</span>
+      <span class="stat-value">Lượt truy cập: #{{visitCount}}</span>
+      <span class="stat-sub">Session ID: <code>{{sessionID}}</code></span>
+    </div>
+  </div>
+</section>
+
+<!-- Alerts Notification -->
+{{#if errorMessage}}
+<div class="alert alert-error">
+  <div class="alert-icon">⚠️</div>
+  <div class="alert-body">
+    <h4>THÔNG BÁO TỪ CHỐI / LỖI</h4>
+    <p>{{errorMessage}}</p>
+  </div>
+</div>
+{{/if}}
+
+{{#if successMessage}}
+<div class="alert alert-success">
+  <div class="alert-icon">✅</div>
+  <div class="alert-body">
+    <h4>THÀNH CÔNG</h4>
+    <p>{{successMessage}}</p>
+  </div>
+</div>
+{{/if}}
+
+<!-- Main Grid: Form & List -->
+<div class="content-grid">
+  <!-- Left Column: Add Book Form -->
+  <div class="card form-card">
+    <div class="card-header">
+      <h2 class="card-title">➕ Thêm Sách Mới</h2>
+      <span class="pill-badge write-pill">Ghi dữ liệu (Write Connection)</span>
+    </div>
+    <div class="card-body">
+      <form action="/books" method="POST" id="addBookForm">
+        <!-- Mã Sách -->
+        <div class="form-group">
+          <label for="bookCode">
+            Mã sản phẩm <span class="required-star">*</span>
+            <span class="prefix-hint">Bắt buộc tiền tố: <strong>{{requiredPrefix}}</strong></span>
+          </label>
+          <input 
+            type="text" 
+            id="bookCode" 
+            name="bookCode" 
+            placeholder="Ví dụ: {{requiredPrefix}}-BK01, {{requiredPrefix}}-CS02" 
+            required
+            autocomplete="off"
+          >
+          <small class="form-help">Hệ thống áp dụng bộ lọc cá nhân hóa theo 3 số cuối MSSV: <code>{{requiredPrefix}}</code></small>
+        </div>
+
+        <!-- Tên Sách -->
+        <div class="form-group">
+          <label for="title">Tên sách <span class="required-star">*</span></label>
+          <input 
+            type="text" 
+            id="title" 
+            name="title" 
+            placeholder="Nhập tên sách..." 
+            required
+          >
+        </div>
+
+        <!-- Tác giả -->
+        <div class="form-group">
+          <label for="author">Tác giả <span class="required-star">*</span></label>
+          <input 
+            type="text" 
+            id="author" 
+            name="author" 
+            placeholder="Nhập tên tác giả..." 
+            required
+          >
+        </div>
+
+        <!-- Thể loại -->
+        <div class="form-group">
+          <label for="category">Thể loại</label>
+          <select id="category" name="category">
+            <option value="Điện toán đám mây">Điện toán đám mây</option>
+            <option value="Khoa học máy tính">Khoa học máy tính</option>
+            <option value="Công nghệ phần mềm">Công nghệ phần mềm</option>
+            <option value="An toàn thông tin">An toàn thông tin</option>
+            <option value="Trí tuệ nhân tạo">Trí tuệ nhân tạo</option>
+          </select>
+        </div>
+
+        <!-- Giá Gốc -->
+        <div class="form-group">
+          <label for="price">Giá gốc (VNĐ) <span class="required-star">*</span></label>
+          <input 
+            type="number" 
+            id="price" 
+            name="price" 
+            placeholder="Ví dụ: 120000" 
+            min="0"
+            step="1000"
+            required
+          >
+        </div>
+
+        <!-- Hộp tính trước thuế VAT -->
+        <div class="vat-calculator-box">
+          <div class="vat-calc-row">
+            <span>Mức thuế suất VAT:</span>
+            <strong>VAT = ({{studentId}} cuối + 5)% = {{vatRate}}%</strong>
+          </div>
+          <div class="vat-calc-row highlight">
+            <span>Giá dự kiến sau thuế:</span>
+            <strong id="previewPriceWithVat">0 VNĐ</strong>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          💾 Lưu Sách Vào Cloud (Write Connection)
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Right Column: Books Table -->
+  <div class="card table-card">
+    <div class="card-header">
+      <h2 class="card-title">📚 Danh Sách Sách Trên Cloud</h2>
+      <span class="pill-badge read-pill">Đọc dữ liệu (Read Connection)</span>
+    </div>
+    <div class="card-body">
+      {{#if books.length}}
+      <div class="table-responsive">
+        <table class="book-table">
+          <thead>
+            <tr>
+              <th>Mã sách</th>
+              <th>Tên sách</th>
+              <th>Tác giả</th>
+              <th>Thể loại</th>
+              <th>Giá gốc</th>
+              <th>VAT</th>
+              <th>Giá sau thuế</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each books}}
+            <tr>
+              <td>
+                <span class="code-badge">{{this.bookCode}}</span>
+              </td>
+              <td class="font-bold">{{this.title}}</td>
+              <td>{{this.author}}</td>
+              <td><span class="badge-cat">{{this.category}}</span></td>
+              <td class="text-right">{{this.price}} đ</td>
+              <td class="text-center"><span class="badge-vat">{{this.vatRate}}%</span></td>
+              <td class="text-right text-success font-bold">{{this.priceWithVAT}} đ</td>
+              <td>
+                <form action="/books/delete/{{this._id}}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xoá cuốn sách này không?');">
+                  <button type="submit" class="btn-delete" title="Xoá sách">🗑️</button>
+                </form>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      {{else}}
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>Chưa có sách nào trong cơ sở dữ liệu!</h3>
+        <p>Hãy thêm sách đầu tiên bằng biểu mẫu bên trái. Đảm bảo mã sách bắt đầu bằng <strong>{{requiredPrefix}}</strong>.</p>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tinh gia sau thue thoi gian thuc khi nguoi dung nhap gia
+  const priceInput = document.getElementById('price');
+  const previewBox = document.getElementById('previewPriceWithVat');
+  const vatRate = {{vatRate}};
+
+  if (priceInput && previewBox) {
+    priceInput.addEventListener('input', () => {
+      const val = parseFloat(priceInput.value) || 0;
+      const calculated = Math.round(val * (1 + vatRate / 100));
+      previewBox.textContent = calculated.toLocaleString('vi-VN') + ' VNĐ';
+    });
+  }
+</script>
